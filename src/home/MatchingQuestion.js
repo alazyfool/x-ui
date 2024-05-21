@@ -28,13 +28,9 @@ const Drag = () => {
         const [movedItem] = leftCopy.splice(source.index, 1);
         leftCopy.splice(destination.index, 0, movedItem);
         setLeftItems(leftCopy);
-      } else {
-        // TODO: this is right to right movement, swap it (this should handle value not present part)
       }
     } else {
-      // Moving between lists
-      if (destination.droppableId.startsWith('right-pane')) {
-        // this is left to right movement
+      if (source.droppableId === 'left-pane' && destination.droppableId.startsWith('right-pane')) {
         const destIndex = parseInt(destination.droppableId.split('-')[2]);
         if (rightItems[destIndex] === null) {
           const newLeftItems = Array.from(leftItems);
@@ -44,17 +40,34 @@ const Drag = () => {
           setLeftItems(newLeftItems);
           setRightItems(newRightItems);
         } else {
-          // TODO: move the item already present on the left
+          const newLeftItems = Array.from(leftItems);
+          const newRightItems = Array.from(rightItems);
+          const [movedItem] = newLeftItems.splice(source.index, 1);
+          const [alreadyPlacedItem] = newRightItems.splice(destIndex, 1, movedItem);
+          newLeftItems.push(alreadyPlacedItem);
+          setLeftItems(newLeftItems);
+          setRightItems(newRightItems);
         }
-      } else if (source.droppableId.startsWith('right-pane')) {
-
-        // this is right to left movement
+      } else if (source.droppableId.startsWith('right-pane') && destination.droppableId === 'left-pane') {
         const sourceIndex = parseInt(source.droppableId.split('-')[2]);
         const newLeftItems = Array.from(leftItems);
         const newRightItems = Array.from(rightItems);
         const [movedItem] = newRightItems.splice(sourceIndex, 1, null);
         newLeftItems.splice(destination.index, 0, movedItem);
         setLeftItems(newLeftItems);
+        setRightItems(newRightItems);
+      } else if (source.droppableId.startsWith('right-pane') && destination.droppableId.startsWith('right-pane')) {
+        const newRightItems = Array.from(rightItems);
+        const sourceIndex = parseInt(source.droppableId.split('-')[2]);
+        const destIndex = parseInt(destination.droppableId.split('-')[2])
+        const [movedItem] = newRightItems.splice(sourceIndex, 1, null);
+        if (newRightItems[destIndex] == null) {
+          newRightItems[destIndex] = movedItem;
+        } else {
+          const temp = newRightItems[destIndex];
+          newRightItems[destIndex] = movedItem;
+          newRightItems[sourceIndex] = temp;
+        }
         setRightItems(newRightItems);
       }
     }
