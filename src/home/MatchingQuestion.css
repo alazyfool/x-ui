@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  padding: 20px;
+}
+
+.left-pane,
+.right-pane {
+  width: 50%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.draggable-item {
+  padding: 16px;
+  margin-bottom: 8px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.droppable-box {
+  margin-bottom: 8px;
+  background-color: #e0e0e0;
+  border: 1px dashed #aaa;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder {
+  color: #999;
+}
